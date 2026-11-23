@@ -44,10 +44,12 @@ uv run pytest -q          # check everything works
 | `fetch_robots(url)` | Goes to the front door and reads `site.com/robots.txt` |
 | `robots_allows(text, url)` | Reads the sign and answers yes/no for one page; no internet needed, so easy to test |
 | `tests/test_scraper.py` | Checks allowed page, blocked page, and "no sign = allowed" |
+| `PoliteClient._wait_turn` | Waits ≥2s between requests to the same site, so I don't flood it |
+| `PoliteClient.get` | Retries busy/broken errors (429, 5xx) with growing waits 2s→4s→8s; never retries 404 |
 
 **Pieces:**
 1. robots.txt check ✅
-2. Slow down + retry
+2. Slow down + retry ✅
 3. Find PDF links on a page
 4. Download, fingerprint, log
 5. Run on real ESG reports
