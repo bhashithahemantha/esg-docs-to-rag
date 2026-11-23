@@ -28,3 +28,28 @@ uv run pytest -q          # check everything works
 - `init.sql` only runs on a brand-new DB → `docker compose down` then `up -d` after changing it
 
 **Interview line:** Reproducible (lockfile + container), and one database for both vectors and keyword search.
+
+### Step 1 – Polite scraper 🚧
+
+**What a scraper is:** a program that visits websites and collects files (ESG report PDFs) so I don't download them by hand.
+
+**Analogy:** visiting someone's house.
+- `robots.txt` = the sign on the front door saying which rooms bots may enter
+- Being polite = read the sign first, only go where allowed, don't knock too often
+- No sign (404) = every room is open
+
+| What | Why |
+|---|---|
+| `USER_AGENT` | My bot's name badge + email, so site owners can contact me instead of blocking me |
+| `fetch_robots(url)` | Goes to the front door and reads `site.com/robots.txt` |
+| `robots_allows(text, url)` | Reads the sign and answers yes/no for one page; no internet needed, so easy to test |
+| `tests/test_scraper.py` | Checks allowed page, blocked page, and "no sign = allowed" |
+
+**Pieces:**
+1. robots.txt check ✅
+2. Slow down + retry
+3. Find PDF links on a page
+4. Download, fingerprint, log
+5. Run on real ESG reports
+
+**Interview line:** My scraper obeys robots.txt and identifies itself, so it doesn't get blocked or break site rules.
